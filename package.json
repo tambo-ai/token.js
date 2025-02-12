@@ -28,7 +28,7 @@
     "docs:check": "vite-node ./scripts/docs/check.ts",
     "clean": "rimraf dist/ ./tsconfig.tsbuildinfo"
   },
-  "author": "Sam Goldman",
+  "author": "Sam Goldman & Libretto AI",
   "keywords": [],
   "license": "MIT",
   "dependencies": {
