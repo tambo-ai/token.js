@@ -1,141 +1,27 @@
-# Token.js
-
-## 0.6.0
-
-### Minor Changes
-
-- c17b56a: Upgrade the openai client library to 4.91.1
-
-## 0.5.4
-
-### Patch Changes
-
-- 3d76ec4: Added claude 3-7 models
-
-## 0.5.3
-
-### Patch Changes
-
-- b30ebe2: Link to repository from NPM
-- 2e5a4d7: Add gemini-2.0 models
-
-## 0.5.2
-
-### Patch Changes
-
-- 1f4b166: Support o3-mini
-
-## 0.5.1
-
-### Patch Changes
-
-- de139f6: Default to hardcoded empty string for API key in the OpenAI compatible provider if no API key is provided
+# @libretto/token.js
 
 ## 0.5.0
 
-### Minor Changes
-
-- b68f2a4: Feat: Add support for extending model lists without official support
-
-## 0.4.8
-
-### Patch Changes
-
-- f11d766: Update groq and perplexity models
-
-## 0.4.7
-
-### Patch Changes
-
-- 1e529df: Offically support generic Openai compatible providers
-
-## 0.4.6
-
-### Patch Changes
-
-- 4d3a3f9: Support Claude 3.5 models in AWS Bedrock
-- b5d8fa6: Support o1-preview and o1-mini
-- b5d8fa6: Support gemini-1.5-flash-8b
-
-## 0.4.5
-
-### Patch Changes
-
-- 2c90288: adding support for openai model gpt-4o-2024-08-06
-
-## 0.4.4
-
-### Patch Changes
-
-- 0823e3b: Add gpt-4o mini
-
-## 0.4.3
-
-### Patch Changes
-
-- ae4304b: remove axios for compatibility in edge environments
-
-## 0.4.2
-
-### Patch Changes
-
-- 50a0584: Support OpenRouter
-
-## 0.4.1
-
-### Patch Changes
-
-- c1e9c14: Fix type import issue
+* Update @libretto/openai to latest version to allow for `templateChat` to be used in libretto params
 
 ## 0.4.0
 
-### Minor Changes
-
-- e68abf2: Add support for Codestral Mamba
+* Cherry-pick upgrade to OpenAI 4.91.1 version from upstream PR.
+* Upgrade to @libretto/openai 1.3.5, adds tools and raw responses to payload
+* Add Libretto SDK on groq, perplexity, and other Openai compatible providers
 
 ## 0.3.0
 
-### Minor Changes
+* Merge from token.js/v0.5.4:
 
-- ba35d6b: Minimize bundle size
-
-## 0.2.3
-
-### Patch Changes
-
-- a4bf186: MIT in features section
-
-## 0.2.2
-
-### Patch Changes
-
-- 4524c42: Update license reference in README
-
-## 0.2.1
-
-### Patch Changes
-
-- 2c3cc3f: Switch to MIT license
+https://github.com/token-js/token.js/releases/tag/v0.5.4
 
 ## 0.2.0
 
-### Minor Changes
-
-- d33fb2a: Initial release
+* Handle Anthropic system messages correctly.
 
 ## 0.1.0
 
-### Minor Changes
+* Initial release of Libretto AI's library for users of TokenJS.
 
-- fd454af: Support CommonJS
-
-### Patch Changes
-
-- b7b9c03: Update entrypoint
-- c449fea: Update models to include whether they support streaming, and add validation to check whether a model supports streaming
-
-## 0.0.1
-
-### Patch Changes
-
-- bde8e4b: Prerelease
+NOTE: Currently, only OpenAI and Anthropic will have events sent to Libretto.
