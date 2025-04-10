@@ -595,7 +595,7 @@ export class AnthropicHandler extends BaseHandler<AnthropicModel> {
         stop_sequences: stopSequences,
         temperature,
         top_p: topP,
-        system: objectTemplate(systemMessage),
+        system: systemMessage ? objectTemplate(systemMessage) : undefined,
         tools,
         tool_choice: toolChoice,
         libretto: body.libretto,
