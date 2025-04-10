@@ -1,5 +1,11 @@
 # @libretto/token.js
 
+## 0.6.0
+
+https://github.com/libretto-ai/token.js/pull/17
+* Fix a bug with system message for Anthropic
+* Upgrade @libretto/anthropic to latest to better support tools in Libretto.
+
 ## 0.5.0
 
 * Update @libretto/openai to latest version to allow for `templateChat` to be used in libretto params
