@@ -1,5 +1,10 @@
 # @libretto/token.js
 
+## 0.7.0
+
+* Rebase with upstream/main
+* Upgrade @libretto/openai to better handle streams.
+
 ## 0.6.0
 
 https://github.com/libretto-ai/token.js/pull/17

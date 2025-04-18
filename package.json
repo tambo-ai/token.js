@@ -1,11 +1,12 @@
 {
   "name": "@libretto/token.js",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/libretto-ai/token.js"
   },
   "homepage": "https://www.libretto.ai/",
+  "packageManager": "pnpm@8.6.12",
   "description": "Integrate 9 LLM providers with a single Typescript SDK using OpenAIs format, and send events to Libretto.",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -37,7 +38,7 @@
     "@aws-sdk/client-bedrock-runtime": "3.609.0",
     "@google/generative-ai": "0.14.1",
     "@libretto/anthropic": "^1.4.0",
-    "@libretto/openai": "^1.3.6",
+    "@libretto/openai": "^1.3.7",
     "@mistralai/mistralai": "0.5.0",
     "chalk": "^4.1.2",
     "cohere-ai": "7.10.6",
