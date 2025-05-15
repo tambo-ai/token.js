@@ -384,12 +384,18 @@ export const convertMessages = async (
   // Anthropic requires that the first message in the array is from a 'user' role, so we inject a
   // placeholder user message if the array doesn't already begin with a message from a 'user' role.
   if (
+    clonedMessages.length > 0 &&
     clonedMessages[0].role !== 'user' &&
     clonedMessages[0].role !== 'system'
   ) {
     clonedMessages.unshift({
       role: 'user',
       content: 'Empty',
+    })
+  } else if (clonedMessages.length === 0 && systemMessage !== undefined) {
+    clonedMessages.push({
+      role: 'user',
+      content: 'Placeholder user message following system prompt.',
     })
   }
 
@@ -410,50 +416,93 @@ export const convertMessages = async (
         ? 'user'
         : 'assistant'
 
-    if (previousRole !== newRole) {
+    if (previousRole !== newRole && currentParams.length > 0) {
       output.push({
         role: previousRole,
         content: currentParams,
       })
+      currentParams = []
+    } else if (
+      previousRole !== newRole &&
+      currentParams.length === 0 &&
+      output.length > 0
+    ) {
       currentParams = []
     }
 
     if (message.role === 'tool') {
       const toolResult: ToolResultBlockParam = {
         tool_use_id: message.tool_call_id,
-        content: message.content,
+        content:
+          typeof message.content === 'string'
+            ? message.content
+            : message.content || [],
         type: 'tool_result',
       }
       currentParams.push(toolResult)
     } else if (message.role === 'assistant') {
+      let assistantContentAdded = false
       if (typeof message.content === 'string') {
-        currentParams.push({
-          text: message.content,
-          type: 'text',
-        })
+        if (message.content.length > 0) {
+          currentParams.push({
+            text: message.content,
+            type: 'text',
+          })
+          assistantContentAdded = true
+        }
+      } else if (Array.isArray(message.content)) {
+        for (const part of message.content) {
+          if (part.type === 'text') {
+            if (part.text && part.text.length > 0) {
+              currentParams.push({
+                type: 'text',
+                text: part.text,
+              } as TextBlockParam)
+              assistantContentAdded = true
+            }
+          }
+        }
       }
 
       if (Array.isArray(message.tool_calls)) {
-        const convertedContent: Array<ToolUseBlockParam> =
+        const convertedToolCalls: Array<ToolUseBlockParam> =
           message.tool_calls.map((toolCall) => {
+            const args =
+              typeof toolCall.function.arguments === 'string'
+                ? toolCall.function.arguments
+                : '{}'
             return {
               id: toolCall.id,
-              input: JSON.parse(toolCall.function.arguments),
+              input: (() => {
+                try {
+                  return args ? JSON.parse(args) : {}
+                } catch (e) {
+                  consoleWarn(
+                    `Failed to parse tool call arguments for tool ${toolCall.function.name} (ID: ${toolCall.id}), using empty object. Arguments: '${args}' Error: ${e}`
+                  )
+                  return {}
+                }
+              })(),
               name: toolCall.function.name,
               type: 'tool_use',
             }
           })
-        currentParams.push(...convertedContent)
+        if (convertedToolCalls.length > 0) {
+          currentParams.push(...convertedToolCalls)
+          assistantContentAdded = true
+        }
       }
     } else if (typeof message.content === 'string') {
       const text =
         message.role === 'system'
           ? `System: ${message.content}`
           : message.content
-      currentParams.push({
-        type: 'text',
-        text,
-      })
+      if (text.length > 0) {
+        currentParams.push({
+          type: 'text',
+          text,
+        })
+      }
     } else if (Array.isArray(message.content)) {
       const convertedContent: Array<TextBlockParam | ImageBlockParam> =
         await Promise.all(
@@ -478,7 +527,20 @@ export const convertMessages = async (
             }
           })
         )
-      currentParams.push(...convertedContent)
+      const nonEmptyContent = convertedContent.filter(
+        (block) =>
+          block.type !== 'text' ||
+          (block.type === 'text' && block.text.length > 0)
+      )
+      if (nonEmptyContent.length > 0) {
+        currentParams.push(...nonEmptyContent)
+      } else if (
+        convertedContent.length > 0 &&
+        convertedContent.every(
+          (block) => block.type === 'text' && block.text.length === 0
+        )
+      ) {
+      }
     }
 
     previousRole = newRole
@@ -488,6 +550,22 @@ export const convertMessages = async (
     output.push({
       role: previousRole,
       content: currentParams,
+    })
+  } else if (output.length > 0 && previousRole === 'assistant') {
+    const lastMessageInOutput = output[output.length - 1]
+    if (lastMessageInOutput.role === 'user') {
+    } else if (lastMessageInOutput.role === 'assistant') {
+      output.push({
+        role: previousRole,
+        content: [],
+      })
+    }
+  }
+
+  if (output.length === 0 && systemMessage && clonedMessages.length === 0) {
+    output.push({
+      role: 'user',
+      content: [{ type: 'text', text: 'Follow system instructions.' }],
     })
   }
 
