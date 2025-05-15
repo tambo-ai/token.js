@@ -439,7 +439,10 @@ export const models = {
       'gemma2-9b-it',
     ] as const,
     supportsImages: [] as const,
-    supportsToolCalls: [] as const,
+    supportsToolCalls: [
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+    ] as const,
     supportsN: false,
     generateDocs: true,
   },
