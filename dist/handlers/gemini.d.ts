@@ -15,7 +15,7 @@ type GenerateContentResultWithOptionalContent = Omit<GenerateContentResult, 'res
     response: EnhancedResponseWithOptionalContent;
 };
 export declare const convertContentsToParts: (contents: Array<ChatCompletionContentPart> | string | null | undefined, systemPrefix: string) => Promise<Part[]>;
-export declare const convertRole: (role: "function" | "system" | "user" | "assistant" | "tool") => "user" | "model";
+export declare const convertRole: (role: "function" | "system" | "user" | "assistant" | "tool") => "model" | "user";
 export declare const convertAssistantMessage: (message: OpenAI.Chat.Completions.ChatCompletionMessage) => Content;
 export declare const convertMessageToContent: (message: OpenAI.Chat.Completions.ChatCompletionMessageParam, includeSystemPrefix: boolean) => Promise<Content>;
 export declare const convertMessagesToContents: (messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[]) => Promise<{
